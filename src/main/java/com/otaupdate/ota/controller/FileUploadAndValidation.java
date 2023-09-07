@@ -54,12 +54,12 @@ public class FileUploadAndValidation {
             errors.add("File size should not be more than 200 KB");
         } else {
             try {
-                if(jsonValidation.validateJson(file, errors)) {
-                    EncodeDecode.encode(new JSONArray(new JSONTokener(file.getInputStream())), model, file.getOriginalFilename(), LOCAL_REPO);
+                if(jsonValidation.validateJson(file, errors)) { 
                     List<FileData> fileDataList = demoRepository.findByFileNameOrderByDateDesc(file.getOriginalFilename());
                     int newVersion = !fileDataList.isEmpty() ? (fileDataList.get(0).getVersion() + 1) : 1;
-                    CompressAndDecompress.compressFile(file.getOriginalFilename(), model, newVersion, LOCAL_REPO);
-                    demoRepository.save(new FileData(file.getOriginalFilename(), LOCAL_REPO, newVersion, new Date()));
+                    CompressAndDecompress.compressFile(file, model, newVersion, LOCAL_REPO);
+                    EncodeDecode.encode(model, file.getOriginalFilename(), LOCAL_REPO, newVersion);
+                    demoRepository.save(new FileData(file.getOriginalFilename(), newVersion, new Date(),model.getAttribute("encoded zip file data").toString()));
                 }
             } catch (IOException ioException){
                 errors.add("Error reading the JSON file :- " + ioException.getMessage());
