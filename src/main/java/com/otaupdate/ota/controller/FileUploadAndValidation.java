@@ -55,11 +55,11 @@ public class FileUploadAndValidation {
         } else {
             try {
                 if(jsonValidation.validateJson(file, errors)) { 
-                    List<FileData> fileDataList = demoRepository.findByFileNameOrderByDateDesc(file.getOriginalFilename());
+                    List<FileData> fileDataList = demoRepository.findByFileNameOrderByDateDesc(file.getOriginalFilename().toLowerCase());
                     int newVersion = !fileDataList.isEmpty() ? (fileDataList.get(0).getVersion() + 1) : 1;
                     CompressAndDecompress.compressFile(file, model, newVersion, LOCAL_REPO);
                     EncodeDecode.encode(model, file.getOriginalFilename(), LOCAL_REPO, newVersion);
-                    demoRepository.save(new FileData(file.getOriginalFilename(), newVersion, new Date(),model.getAttribute("encoded zip file data").toString()));
+                    demoRepository.save(new FileData(file.getOriginalFilename().toLowerCase(), newVersion, new Date(),model.getAttribute("encoded zip file data").toString()));
                 }
             } catch (IOException ioException){
                 errors.add("Error reading the JSON file :- " + ioException.getMessage());
