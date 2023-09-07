@@ -7,14 +7,20 @@ import java.io.IOException;
 import java.util.zip.GZIPOutputStream;
 
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 public class CompressAndDecompress {
 
-    public static void compressFile(String fileName, Model model, int newVersion, String localRepo ) throws IOException{
+    public static void compressFile(MultipartFile file, Model model, int newVersion, String localRepo) throws IOException{
+        File theDir = new File(localRepo);
+        if (!theDir.exists()) {
+            theDir.mkdirs();
+        }
         int length;
-        File readFile = new File(localRepo + "\\" + fileName);
+        File readFile = new File(localRepo + "\\" + file.getOriginalFilename());
+        file.transferTo(readFile);
         FileInputStream fileInputStream = new FileInputStream(readFile);
-        FileOutputStream fileOutputStream= new FileOutputStream(localRepo + "\\" + fileName + "_v" + newVersion + ".zip");
+        FileOutputStream fileOutputStream= new FileOutputStream(localRepo + "\\" + file.getOriginalFilename() + "_v" + newVersion + ".zip");
         GZIPOutputStream gzipOutputStream = new GZIPOutputStream(fileOutputStream);
         byte[] buffer = new byte[1024];
         while((length=fileInputStream.read(buffer)) != -1){
@@ -23,7 +29,7 @@ public class CompressAndDecompress {
         gzipOutputStream.close();
         fileOutputStream.close();
         fileInputStream.close();
-        model.addAttribute("zip file ==================", "Successful ");
         readFile.delete();
-;    }
+
+    }
 }

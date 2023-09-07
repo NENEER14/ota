@@ -5,16 +5,16 @@ import java.util.Date;
 public class FileData {
     
     private String fileName;
-    private String filePath;
     private int version;
     private Date date;
+	private String encodedFile;
 
 
-    public FileData(String fileName, String filePath, int version, Date date) {
+    public FileData(String fileName, int version, Date date, String encodedFile) {
         this.fileName = fileName;
-        this.filePath = filePath;
         this.version = version;
         this.date = date;
+		this.encodedFile = encodedFile;
     }
 
     public String getFileName() {
@@ -22,12 +22,6 @@ public class FileData {
 	}
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
-	}
-	public String getFilePath() {
-		return filePath;
-	}
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
 	}
 	public int getVersion() {
 		return version;
@@ -40,5 +34,11 @@ public class FileData {
 	}
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	public String getEncodedFile() {
+		return encodedFile;
+	}
+	public void setEncodedFile(String encodedFile) {
+		this.encodedFile = encodedFile;
 	}
 }
