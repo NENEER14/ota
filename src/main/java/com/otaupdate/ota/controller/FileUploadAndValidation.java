@@ -58,8 +58,8 @@ public class FileUploadAndValidation {
                     EncodeDecode.encode(new JSONArray(new JSONTokener(file.getInputStream())), model, file.getOriginalFilename(), LOCAL_REPO);
                     List<FileData> fileDataList = demoRepository.findByFileNameOrderByDateDesc(file.getOriginalFilename());
                     int newVersion = !fileDataList.isEmpty() ? (fileDataList.get(0).getVersion() + 1) : 1;
-                    demoRepository.save(new FileData(file.getOriginalFilename(), LOCAL_REPO, newVersion, new Date()));
                     CompressAndDecompress.compressFile(file.getOriginalFilename(), model, newVersion, LOCAL_REPO);
+                    demoRepository.save(new FileData(file.getOriginalFilename(), LOCAL_REPO, newVersion, new Date()));
                 }
             } catch (IOException ioException){
                 errors.add("Error reading the JSON file :- " + ioException.getMessage());
