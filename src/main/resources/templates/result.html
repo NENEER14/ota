@@ -13,12 +13,5 @@
             <li th:each="error:${errors}" th:text="${error}"></li>
         </ul>
     </div>
-
-    <div th:if="${jsonData}">
-        <h2>Encoded and Compressed Data:</h2>
-        <ul>
-            <li th:each="error:${jsonData}" th:text="${error}"></li>
-        </ul>
-    </div>
 </body>
 </html>
