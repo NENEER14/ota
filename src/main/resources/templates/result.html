@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Processing result</title>
+</head>
+<body>
+    <h1>Processing result</h1>
+
+    <div th:if="${not #lists.isEmpty(errors)}">
+        <h2>Errors</h2>
+        <ul>
+            <li th:each="error:${errors}" th:text="${error}"></li>
+        </ul>
+    </div>
+
+    <div th:if="${jsonData}">
+        <h2>Encoded and Compressed Data:</h2>
+        <ul>
+            <li th:each="error:${jsonData}" th:text="${error}"></li>
+        </ul>
+    </div>
+</body>
+</html>

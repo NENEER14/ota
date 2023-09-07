@@ -1,0 +1,44 @@
+{  
+    "type": "object",  
+    "title": "Vehicle",  
+    "description": "Vehicle information",  
+    "additionalProperties": true,  
+    "required": ["vin_num", "policy_num", "model", "make_year"],  
+    "properties": {  
+        "vin_num": {  
+            "type": "string",
+			"minLength": 17,
+			"maxLength": 17,
+            "description": "VIN Number"  
+        },  
+        "policy_num": {   
+            "type": "string",  
+            "maxLength": 50,  
+            "description": "Policy Number"  
+        },  
+        "model": {  
+            "type": "string",  
+            "description": "Model Name"  
+        },  
+        "make": {  
+            "type": "string",  
+            "items": "Make Name"
+        },  
+        "make_year": {   
+            "type": "number",  
+            "minimum": 1900,
+			"maximum": 2024,  
+            "description": "Make Year"  
+        },  
+        "country_name": {  
+            "type": "string",  
+            "description": "Country Name"  
+        },  
+        "tire_pressure": {  
+            "type": "number",
+			"minLength": 2,
+			"maxLength": 2,
+            "items": "Tire Pressure" 
+        }  
+    }
+} 
