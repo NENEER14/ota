@@ -52,7 +52,7 @@ public class FileUploadAndValidation {
         if(file.isEmpty()) {
             errors.add("Please select a file to upload (JSON)");
         } if(file.getSize() / 1024 > 200) {
-            errors.add("File size should not be more than 100 KB");
+            errors.add("File size should not be more than 200 KB");
         } else {
             try {
                 if(jsonValidation.validateJson(file, model)) {
