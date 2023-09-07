@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -24,35 +25,37 @@ public class EncodeDecode {
 			encodedBase64 = new String(Base64.getEncoder().encodeToString(bytes));
             fileInputStreamReader.close();
             model.addAttribute("encoded zip file data", encodedBase64);
-            decode(encodedBase64, model);
+            decode(encodedBase64, model, localRepo, fileName, newVersion);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
     }
 
-    public static void decode(String encodedBase64, Model model){
+    public static void decode(String encodedBase64, Model model, String localRepo, String fileName, int newVersion) throws IOException{
         StringBuilder output = new StringBuilder();
         byte[] compressed = Base64.getDecoder().decode(encodedBase64);
+        try (FileWriter newFile = new FileWriter(localRepo + "\\" + fileName + "_v" + newVersion + ".json")) {
+            if ((compressed == null) || (compressed.length == 0)) {
+                throw new IllegalArgumentException("Cannot unzip null or empty bytes");
+            }
 
-        if ((compressed == null) || (compressed.length == 0)) {
-            throw new IllegalArgumentException("Cannot unzip null or empty bytes");
-        }
-
-        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(compressed)) {
-            try (GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream)) {
-                try (InputStreamReader inputStreamReader =
-                             new InputStreamReader(gzipInputStream, StandardCharsets.UTF_8)) {
-                    try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-                        String line;
-                        while ((line = bufferedReader.readLine()) != null) {
-                            output.append(line);
-                            model.addAttribute("decoded format", output);
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(compressed)) {
+                try (GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream)) {
+                    try (InputStreamReader inputStreamReader =
+                                 new InputStreamReader(gzipInputStream, StandardCharsets.UTF_8)) {
+                        try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                            String line;
+                            while ((line = bufferedReader.readLine()) != null) {
+                                    output.append(line);
+                                    newFile.write(line);
+                                    model.addAttribute("decoded format", output);
+                            }
                         }
                     }
                 }
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to unzip content", e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to unzip content", e);
         }
     }
 }
