@@ -4,14 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.networknt.schema.JsonSchema;
@@ -21,9 +19,8 @@ import com.networknt.schema.ValidationMessage;
 
 public class JsonValidation {
 
-    public boolean validateJson(MultipartFile file, Model model) throws IOException {
+    public boolean validateJson(MultipartFile file, List<String> errors) throws IOException {
         boolean fileSuccess = true;
-        List<String> errors = new ArrayList<>();
         JSONObject jsonObject;
         JsonSchemaFactory schemaFactory = JsonSchemaFactory.getInstance( SpecVersion.VersionFlag.V201909 ); 
         InputStream schemaStream = new FileInputStream( new File(getClass().getResource("/schema.json").getFile()));
@@ -40,7 +37,6 @@ public class JsonValidation {
                 fileSuccess = false;
             }
         }
-        model.addAttribute("errors", errors);
         return fileSuccess;
     }
 }

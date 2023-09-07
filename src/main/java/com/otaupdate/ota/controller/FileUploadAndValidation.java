@@ -55,7 +55,7 @@ public class FileUploadAndValidation {
             errors.add("File size should not be more than 200 KB");
         } else {
             try {
-                if(jsonValidation.validateJson(file, model)) {
+                if(jsonValidation.validateJson(file, errors)) {
                     EncodeDecode.encode(new JSONArray(new JSONTokener(file.getInputStream())), model, file.getOriginalFilename(), LOCAL_REPO);
                     List<FileData> fileDataList = demoRepository.findByFileNameOrderByDateDesc(file.getOriginalFilename());
                     int newVersion = !fileDataList.isEmpty() ? (fileDataList.get(0).getVersion() + 1) : 1;
