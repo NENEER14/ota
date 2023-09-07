@@ -37,9 +37,6 @@ public class EncodeDecode {
         if ((compressed == null) || (compressed.length == 0)) {
             throw new IllegalArgumentException("Cannot unzip null or empty bytes");
         }
-        if (!isZipped(compressed)) {
-            System.out.println(compressed);
-        }
 
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(compressed)) {
             try (GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream)) {
@@ -57,10 +54,5 @@ public class EncodeDecode {
         } catch (IOException e) {
             throw new RuntimeException("Failed to unzip content", e);
         }
-    }
-
-    public static boolean isZipped(final byte[] compressed) {
-        return (compressed[0] == (byte) (GZIPInputStream.GZIP_MAGIC))
-                && (compressed[1] == (byte) (GZIPInputStream.GZIP_MAGIC >> 8));
     }
 }
