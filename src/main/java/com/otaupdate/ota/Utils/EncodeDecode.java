@@ -24,7 +24,7 @@ public class EncodeDecode {
 			fileInputStreamReader.read(bytes);
 			encodedBase64 = new String(Base64.getEncoder().encodeToString(bytes));
             fileInputStreamReader.close();
-            model.addAttribute("encoded zip file data", encodedBase64);
+            model.addAttribute("encoded_zip_file_data", encodedBase64);
             decode(encodedBase64, model, localRepo, fileName, newVersion);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -34,7 +34,9 @@ public class EncodeDecode {
     public static void decode(String encodedBase64, Model model, String localRepo, String fileName, int newVersion) throws IOException{
         StringBuilder output = new StringBuilder();
         byte[] compressed = Base64.getDecoder().decode(encodedBase64);
-        try (FileWriter newFile = new FileWriter(localRepo + "\\" + fileName + "_v" + newVersion + ".json")) {
+        int dotIndex = fileName.lastIndexOf('.');
+        String fileBaseName = (dotIndex == -1) ? fileName : fileName.substring(0, dotIndex);;
+        try (FileWriter newFile = new FileWriter(localRepo + "\\" + fileBaseName + "_v" + newVersion + ".json")) {
             if ((compressed == null) || (compressed.length == 0)) {
                 throw new IllegalArgumentException("Cannot unzip null or empty bytes");
             }
